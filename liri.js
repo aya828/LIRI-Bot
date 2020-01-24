@@ -19,13 +19,14 @@ const questions = [
   inquirer.prompt(questions)
 
   .then(function(response) {
-    switch (response) {
+    console.log(response.search);
+    switch (response.search) {
       case 'Concerts':
         console.log("concerts");
         concerts();
         break;
       case 'Songs':
-        console.log("songs");
+        // console.log("songs");
         songs();
         break;
       case 'Movies':
@@ -34,29 +35,34 @@ const questions = [
       case 'Nothing':
         says();
         break 
-    };
+    }
+  })
   
 
   const concerts = () => {
-    inquirer
-      .prompt([
-        {
-          type: "input",
-          name: "name",
-          message: "Enter an artist/band:"
-        }
-      ])
+    let bandQuestions = [
+      {
+        type: "input",
+        name: "name",
+        message: "Enter an artist/band:"
+      }
+    ]
+    inquirer.prompt(bandQuestions)
+
+      .then(function(response) {
       axios
-          .get("https://rest.bandsintown.com/artists/"+ response.name + "/events?app_id=codingbootcamp")
+          .get("https://rest.bandsintown.com/artists/" + response.name + "/events?app_id=codingbootcamp")
           .then(function (response) {
-            // handle success
+            // HANDLE SUCCESS
             console.log(response);
           })
           .catch(function (error) {
-            // handle error
+            // HANDLE ERROR
             console.log(error);
-          });
-  }
+          })
+        })
+    }
+  
 
 
 
@@ -73,7 +79,7 @@ const questions = [
           .then(function(response) {
             // console.log(response);
             // console.log(response.tracks);
-            console.log(response.tracks.items.length);
+            // console.log(response.tracks.items.length);
 
 
 
@@ -81,4 +87,4 @@ const questions = [
           .catch(function(err) {
             console.log(err);
           });
-        })
+  
