@@ -7,15 +7,17 @@ const inquirer = require('inquirer');
 const moment = require('moment')
 const fs = require('fs');
 
-inquirer
-  .prompt([
+const questions = [
     {
       type: "list",
       name: 'search',
       message: "Pick a search:",
       choices: ['Concerts', 'Songs', 'Movies', 'Nothing']
     }
-  ])
+  ]
+
+  inquirer.prompt(questions)
+
   .then(function(response) {
     switch (response) {
       case 'Concerts':
@@ -23,6 +25,7 @@ inquirer
         concerts();
         break;
       case 'Songs':
+        console.log("songs");
         songs();
         break;
       case 'Movies':
