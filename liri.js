@@ -86,7 +86,7 @@ const questions = [
         // console.log(response.tracks);
         console.log(response.tracks.items[0].artists[0].name);
         console.log(response.tracks.items[0].artists[0].external_urls);
-        console.log(response.tracks.items[0].album[0].name);
+        // console.log(response.tracks.items[0].album[0].Name);
 
         // Artist(s)
 
@@ -114,17 +114,18 @@ const questions = [
       }
     ]
     inquirer.prompt(movieQuestion)
-
-      .then(function(response) {
-        axios
-        .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
-        .then(function (response) {
-          console.log(response)
-        })
+    .then(function(response) {
+      axios
+      .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
+      .then(function (response) {
+        console.log(response.data.Title);
+        console.log(response.data.Year);
+        console.log("Imdb Rating: " + response.data.imdbRating);
+        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+        console.log(response.data.Country);
+        console.log(response.data.Language);
+        console.log("Plot: " + response.data.Plot);
+        console.log("Actors: " + response.data.Actors);
       })
+    })
   }
-  
-
-
-
-        
