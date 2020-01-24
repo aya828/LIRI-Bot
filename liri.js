@@ -7,32 +7,34 @@ const inquirer = require('inquirer');
 const moment = require('moment')
 const fs = require('fs');
 
+moment().format()
+
 const questions = [
-    {
-      type: "list",
-      name: 'search',
-      message: "Pick a search:",
-      choices: ['Concerts', 'Songs', 'Movies', 'Nothing']
-    }
-  ]
+  {
+    type: "list",
+    name: 'search',
+    message: "Pick a search:",
+    choices: ['concert-this', 'spotify-this-song', 'movie-this', 'do-what-it-says']
+  }
+]
 
   inquirer.prompt(questions)
 
   .then(function(response) {
-    console.log(response.search);
+    // console.log(response.search);
     switch (response.search) {
-      case 'Concerts':
+      case 'concert-this':
         console.log("concerts");
         concerts();
         break;
-      case 'Songs':
+      case 'spotify-this-song':
         // console.log("songs");
         songs();
         break;
-      case 'Movies':
+      case 'movie-this':
         movies();
         break;
-      case 'Nothing':
+      case 'do-what-it-says':
         says();
         break 
     }
@@ -48,87 +50,81 @@ const questions = [
       }
     ]
     inquirer.prompt(bandQuestion)
+    .then(function(response) {
+    axios
+      .get("https://rest.bandsintown.com/artists/" + response.name + "/events?app_id=codingbootcamp")
+      .then(function (response) {
+        // HANDLE SUCCESS
+        for( var i = 0; i < 5; i++) {
+          console.log(response.data[i].venue.name);
+          console.log(response.data[i].venue.city);
+          let date = console.log(response.data[i].datetime);
+          date = moment().format("MM DD YYYY");
+        }
+      })
+      .catch(function (error) {
+        // HANDLE ERROR
+        console.log(error);
+      })
+    })
+  }
+
+  const songs = () => {
+    let songQuestion = [
+      {
+        type: "input",
+        name: "name",
+        message: "Enter a song:"
+      }
+    ]
+    inquirer.prompt(songQuestion)
+    .then(function(response) {
+      spotify
+      .search({ type: 'track', query: response.name })
+      .then(function(response) {
+        // console.log(response);
+        // console.log(response.tracks);
+        console.log(response.tracks.items[0].artists[0].name);
+        console.log(response.tracks.items[0].artists[0].external_urls);
+        console.log(response.tracks.items[0].album[0].name);
+
+        // Artist(s)
+
+
+        // The song's name
+        
+        
+        // A preview link of the song from Spotify
+        
+        
+        // The album that the song is from        
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+      })
+  }
+
+  const movies = () => {
+    let movieQuestion = [
+      {
+        type: "input",
+        name: "name",
+        message: "Enter a movie:"
+      }
+    ]
+    inquirer.prompt(movieQuestion)
 
       .then(function(response) {
-      axios
-          .get("https://rest.bandsintown.com/artists/" + response.name + "/events?app_id=codingbootcamp")
-          .then(function (response) {
-            // HANDLE SUCCESS
-            console.log(response);
-          })
-          .catch(function (error) {
-            // HANDLE ERROR
-            console.log(error);
-          })
+        axios
+        .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
+        .then(function (response) {
+          console.log(response)
         })
-    }
-
-    const songs = () => {
-      let songQuestion = [
-        {
-          type: "input",
-          name: "name",
-          message: "Enter a song:"
-        }
-      ]
-      inquirer.prompt(songQuestion)
-  
-        .then(function(response) {
-          spotify
-          .search({ type: 'track', query: response.name })
-          .then(function(response) {
-            // console.log(response);
-            // console.log(response.tracks);
-            console.log(response.tracks.items);
-
-          })
-          .catch(function(err) {
-            console.log(err);
-          });
-          })
-      }
-
-      const movies = () => {
-        let movieQuestion = [
-          {
-            type: "input",
-            name: "name",
-            message: "Enter a movie:"
-          }
-        ]
-        inquirer.prompt(movieQuestion)
-    
-          .then(function(response) {
-            axios
-            .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
-            .then(function (response) {
-              console.log(response)
-            })
-          })
-        }
+      })
+  }
   
 
 
 
         
-
-        // axios
-        //   .get("https://www.omdbapi.com/?t=The%20Matrix&apikey=trilogy")
-        //   .then(function (response) {
-        //     console.log(response)
-        //   })
-      
-        // spotify
-        //   .search({ type: 'track', query: 'All the Small Things' })
-        //   .then(function(response) {
-        //     // console.log(response);
-        //     // console.log(response.tracks);
-        //     // console.log(response.tracks.items.length);
-
-
-
-        //   })
-        //   .catch(function(err) {
-        //     console.log(err);
-        //   });
-  
