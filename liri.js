@@ -62,6 +62,31 @@ const questions = [
           })
         })
     }
+
+    const songs = () => {
+      let songQuestions = [
+        {
+          type: "input",
+          name: "name",
+          message: "Enter a song:"
+        }
+      ]
+      inquirer.prompt(songQuestions)
+  
+        .then(function(response) {
+          spotify
+          .search({ type: 'track', query: response.name })
+          .then(function(response) {
+            // console.log(response);
+            // console.log(response.tracks);
+            console.log(response.tracks.items);
+
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+          })
+      }
   
 
 
@@ -74,17 +99,17 @@ const questions = [
         //     console.log(response)
         //   })
       
-        spotify
-          .search({ type: 'track', query: 'All the Small Things' })
-          .then(function(response) {
-            // console.log(response);
-            // console.log(response.tracks);
-            // console.log(response.tracks.items.length);
+        // spotify
+        //   .search({ type: 'track', query: 'All the Small Things' })
+        //   .then(function(response) {
+        //     // console.log(response);
+        //     // console.log(response.tracks);
+        //     // console.log(response.tracks.items.length);
 
 
 
-          })
-          .catch(function(err) {
-            console.log(err);
-          });
+        //   })
+        //   .catch(function(err) {
+        //     console.log(err);
+        //   });
   
