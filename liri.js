@@ -40,14 +40,14 @@ const questions = [
   
 
   const concerts = () => {
-    let bandQuestions = [
+    let bandQuestion = [
       {
         type: "input",
         name: "name",
         message: "Enter an artist/band:"
       }
     ]
-    inquirer.prompt(bandQuestions)
+    inquirer.prompt(bandQuestion)
 
       .then(function(response) {
       axios
@@ -64,14 +64,14 @@ const questions = [
     }
 
     const songs = () => {
-      let songQuestions = [
+      let songQuestion = [
         {
           type: "input",
           name: "name",
           message: "Enter a song:"
         }
       ]
-      inquirer.prompt(songQuestions)
+      inquirer.prompt(songQuestion)
   
         .then(function(response) {
           spotify
@@ -87,6 +87,25 @@ const questions = [
           });
           })
       }
+
+      const movies = () => {
+        let movieQuestion = [
+          {
+            type: "input",
+            name: "name",
+            message: "Enter a movie:"
+          }
+        ]
+        inquirer.prompt(movieQuestion)
+    
+          .then(function(response) {
+            axios
+            .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
+            .then(function (response) {
+              console.log(response)
+            })
+          })
+        }
   
 
 
