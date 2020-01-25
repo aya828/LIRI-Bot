@@ -82,22 +82,10 @@ const questions = [
       spotify
       .search({ type: 'track', query: response.name })
       .then(function(response) {
-        // console.log(response);
-        // console.log(response.tracks);
         console.log(response.tracks.items[0].artists[0].name);
+        console.log(response.tracks.items[0].name);
         console.log(response.tracks.items[0].artists[0].external_urls);
-        // console.log(response.tracks.items[0].album[0].Name);
-
-        // Artist(s)
-
-
-        // The song's name
-        
-        
-        // A preview link of the song from Spotify
-        
-        
-        // The album that the song is from        
+        console.log(response.tracks.items[0].album.name);
       })
       .catch(function(err) {
         console.log(err);
