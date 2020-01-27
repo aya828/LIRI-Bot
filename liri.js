@@ -9,6 +9,7 @@ const fs = require('fs');
 
 moment().format()
 
+// USER WILL PICK OUT OF CHOICES TO RUN SEARCH
 const questions = [
   {
     type: "list",
@@ -20,15 +21,13 @@ const questions = [
 
   inquirer.prompt(questions)
 
+  // FUNCTION FOR CHOSEN OPTION IN QUESTIONS PROMPT
   .then(function(response) {
-    // console.log(response.search);
     switch (response.search) {
       case 'concert-this':
-        console.log("concerts");
         concerts();
         break;
       case 'spotify-this-song':
-        // console.log("songs");
         songs();
         break;
       case 'movie-this':
@@ -40,7 +39,7 @@ const questions = [
     }
   })
   
-
+  // BAND API 
   const concerts = () => {
     let bandQuestion = [
       {
@@ -68,6 +67,7 @@ const questions = [
     })
   }
 
+  // SPOTIFY SONG PROMPT
   const songs = () => {
     let songQuestion = [
       {
@@ -76,33 +76,31 @@ const questions = [
         message: "Enter a song:"
       }
     ]
-    inquirer.prompt(songQuestion)
-
-    .then(function(response) {
-      if(response.name == "") {
-        // HANDLE SUCCESS
+    inquirer.prompt(songQuestion).then(function(response) {
+      if(!response.name) {
         response.name = "the sign";
-        spotify
-          .search({ type: 'track', query: response.name })
       }
-      spotify
-      .search({ type: 'track', query: response.name })
-      .then(function(response) {
-        else {
-          console.log(response.tracks.items[0].artists[0].name);
-          console.log(response.tracks.items[0].name);
-          console.log(response.tracks.items[0].artists[0].external_urls);
-          console.log(response.tracks.items[0].album.name);
-        }
-        
-      })
-      .catch(function(err) {
-        // HANDLE ERROR
-        console.log(err);
-      });
-    })
+      searchSpotifyForSong(response.name);
+    });
   }
 
+  // SPOTIFY SONG SEARCH AND DATA
+  const searchSpotifyForSong = (query) => {
+    console.log(query);
+    spotify.search({ type: 'track', query: query })
+    .then(function(response){
+      console.log(response.tracks.items[0].artists[0].name);
+      console.log(response.tracks.items[0].name);
+      console.log(response.tracks.items[0].artists[0].external_urls);
+      console.log(response.tracks.items[0].album.name); 
+    })
+    .catch(function(err) {
+      // HANDLE ERROR
+      console.log(err);
+    });
+  }
+
+  // MOVIE NAME PROMPT
   const movies = () => {
     let movieQuestion = [
       {
@@ -111,49 +109,48 @@ const questions = [
         message: "Enter a movie:"
       }
     ]
-    inquirer.prompt(movieQuestion)
-    .then(function(response) {
-      axios
-      .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
-      .then(function (response) {
-        // HANDLE SUCCESS
-        console.log(response.data.Title);
-        console.log(response.data.Year);
-        console.log(`Imdb Rating: ${response.data.imdbRating}`);
-        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
-        console.log(response.data.Country);
-        console.log(response.data.Language);
-        console.log("Plot: " + response.data.Plot);
-        console.log("Actors: " + response.data.Actors);
-      })
-      .catch(function(err) {
-        // HANDLE ERROR
-        console.log(err);
-      });
+    inquirer.prompt(movieQuestion).then(function(response) {
+      if(!response.name) {
+        response.name = "Mr. Nobody";
+      }
+      console.log(response.name);
+      searchMovie(response.name);
     })
   }
 
+  // MOVIE API AND DATA
+  const searchMovie = (response) => {
+    axios
+    .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
+    .then(function (response) {
+      // HANDLE SUCCESS
+      console.log(response.data.Title);
+      console.log(response.data.Year);
+      console.log(`Imdb Rating: ${response.data.imdbRating}`);
+      console.log(`Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}`);
+      console.log(response.data.Country);
+      console.log(response.data.Language);
+      console.log(`Plot: ${response.data.Plot}`);
+      console.log(`Actors: ${response.data.Actors}`);
+    })
+    .catch(function(err) {
+      // HANDLE ERROR
+      console.log(err);
+    });
+  }
+  
+  // PULL DATA FROM RANDOM.TXT FILE TO SEARCH
   const says = () => {
     fs.readFile('./random.txt', 'utf8',
-     function read(err, data) {
+    function read(err, data) {
       if (err) {
         // HANDLE ERROR
         console.log(err);
       }
       // HANDLE SUCCESS
-  //     // let random = fs.readFileSync('./random.txt', 'utf8');
-  //     // let text = JSON.parse(random);
-  //     // console.log(text[0]);
-
-  //     // console.log(JSON.parse(random));
-      
-  //     // JSON.parse(random);
-        console.log(data);
         let randomText = data;
-        let arr = randomText.split(', ');
-        console.log(arr);
-
-
-  //     // JSON.parse(text);
-     });
-    }
+        let arr = randomText.split(',');
+        let text = arr[1];
+        searchSpotifyForSong(text);
+    })
+  }
