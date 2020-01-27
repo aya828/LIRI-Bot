@@ -58,8 +58,7 @@ const questions = [
         for( var i = 0; i < 5; i++) {
           console.log(response.data[i].venue.name);
           console.log(response.data[i].venue.city);
-          let date = console.log(response.data[i].datetime);
-          date = moment().format("MM DD YYYY");
+          console.log(moment(response.data[i].datetime).format("MM/DD/YYYY"));
         }
       })
       .catch(function (error) {
@@ -82,15 +81,17 @@ const questions = [
       spotify
       .search({ type: 'track', query: response.name })
       .then(function(response) {
+        // HANDLE SUCCESS
         console.log(response.tracks.items[0].artists[0].name);
         console.log(response.tracks.items[0].name);
         console.log(response.tracks.items[0].artists[0].external_urls);
         console.log(response.tracks.items[0].album.name);
       })
       .catch(function(err) {
+        // HANDLE ERROR
         console.log(err);
       });
-      })
+    })
   }
 
   const movies = () => {
@@ -106,6 +107,7 @@ const questions = [
       axios
       .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
       .then(function (response) {
+        // HANDLE SUCCESS
         console.log(response.data.Title);
         console.log(response.data.Year);
         console.log("Imdb Rating: " + response.data.imdbRating);
@@ -115,5 +117,28 @@ const questions = [
         console.log("Plot: " + response.data.Plot);
         console.log("Actors: " + response.data.Actors);
       })
+      .catch(function(err) {
+        // HANDLE ERROR
+        console.log(err);
+      });
+    })
+  }
+
+  const says = () => {
+    fs.readFile('./random.txt', 'utf8',
+     function read(err, data) {
+      if (err) {
+        // HANDLE ERROR
+        console.log(err);
+      }
+      // HANDLE SUCCESS
+      let random = fs.readFileSync('./random.txt', 'utf8');
+      let text = JSON.parse(random);
+      console.log(text[0]);
+
+      console.log(JSON.parse(random));
+      
+      JSON.parse(random);
+      console.log(obj);
     })
   }
