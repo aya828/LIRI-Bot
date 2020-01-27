@@ -55,7 +55,7 @@ const questions = [
       .get("https://rest.bandsintown.com/artists/" + response.name + "/events?app_id=codingbootcamp")
       .then(function (response) {
         // HANDLE SUCCESS
-        for( var i = 0; i < 5; i++) {
+        for( var i = 0; i < response.data.length; i++) {
           console.log(response.data[i].venue.name);
           console.log(response.data[i].venue.city);
           console.log(moment(response.data[i].datetime).format("MM/DD/YYYY"));
@@ -77,15 +77,24 @@ const questions = [
       }
     ]
     inquirer.prompt(songQuestion)
+
     .then(function(response) {
+      if(response.name == "") {
+        // HANDLE SUCCESS
+        response.name = "the sign";
+        spotify
+          .search({ type: 'track', query: response.name })
+      }
       spotify
       .search({ type: 'track', query: response.name })
       .then(function(response) {
-        // HANDLE SUCCESS
-        console.log(response.tracks.items[0].artists[0].name);
-        console.log(response.tracks.items[0].name);
-        console.log(response.tracks.items[0].artists[0].external_urls);
-        console.log(response.tracks.items[0].album.name);
+        else {
+          console.log(response.tracks.items[0].artists[0].name);
+          console.log(response.tracks.items[0].name);
+          console.log(response.tracks.items[0].artists[0].external_urls);
+          console.log(response.tracks.items[0].album.name);
+        }
+        
       })
       .catch(function(err) {
         // HANDLE ERROR
@@ -110,7 +119,7 @@ const questions = [
         // HANDLE SUCCESS
         console.log(response.data.Title);
         console.log(response.data.Year);
-        console.log("Imdb Rating: " + response.data.imdbRating);
+        console.log(`Imdb Rating: ${response.data.imdbRating}`);
         console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
         console.log(response.data.Country);
         console.log(response.data.Language);
@@ -132,13 +141,19 @@ const questions = [
         console.log(err);
       }
       // HANDLE SUCCESS
-      let random = fs.readFileSync('./random.txt', 'utf8');
-      let text = JSON.parse(random);
-      console.log(text[0]);
+  //     // let random = fs.readFileSync('./random.txt', 'utf8');
+  //     // let text = JSON.parse(random);
+  //     // console.log(text[0]);
 
-      console.log(JSON.parse(random));
+  //     // console.log(JSON.parse(random));
       
-      JSON.parse(random);
-      console.log(obj);
-    })
-  }
+  //     // JSON.parse(random);
+        console.log(data);
+        let randomText = data;
+        let arr = randomText.split(', ');
+        console.log(arr);
+
+
+  //     // JSON.parse(text);
+     });
+    }
