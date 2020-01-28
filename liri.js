@@ -113,7 +113,6 @@ const questions = [
       if(!response.name) {
         response.name = "Mr. Nobody";
       }
-      console.log(response.name);
       searchMovie(response.name);
     })
   }
@@ -121,17 +120,17 @@ const questions = [
   // MOVIE API AND DATA
   const searchMovie = (response) => {
     axios
-    .get("https://www.omdbapi.com/?t=" + response.name + "&apikey=trilogy")
-    .then(function (response) {
+    .get("https://www.omdbapi.com/?t=" + response + "&apikey=trilogy")
+    .then(function (resp) {
       // HANDLE SUCCESS
-      console.log(response.data.Title);
-      console.log(response.data.Year);
-      console.log(`Imdb Rating: ${response.data.imdbRating}`);
-      console.log(`Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}`);
-      console.log(response.data.Country);
-      console.log(response.data.Language);
-      console.log(`Plot: ${response.data.Plot}`);
-      console.log(`Actors: ${response.data.Actors}`);
+      console.log(resp.data.Title);
+      console.log(resp.data.Year);
+      console.log(`Imdb Rating: ${resp.data.imdbRating}`);
+      console.log(`Rotten Tomatoes Rating: ${resp.data.Ratings[1].Value}`);
+      console.log(resp.data.Country);
+      console.log(resp.data.Language);
+      console.log(`Plot: ${resp.data.Plot}`);
+      console.log(`Actors: ${resp.data.Actors}`);
     })
     .catch(function(err) {
       // HANDLE ERROR
