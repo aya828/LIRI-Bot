@@ -1,6 +1,6 @@
 # LIRI Bot
 
-GitHub Link: https://aya828.github.io/hw07-liri/
+GitHub Link: https://github.com/aya828/hw07-liri
 
 LIRI, a language interpretation and recognition interface, is a command line node app that takes in the parameters and gives back data. Users can choose between "concert-this", "spotify-this-song", "movie-this", and "do-what-it-says".
 
